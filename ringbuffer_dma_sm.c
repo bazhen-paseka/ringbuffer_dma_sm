@@ -1,5 +1,6 @@
 
 #include "ringbuffer_dma_sm.h"
+#include "ringbuffer_dma_parol.h"
 #include <stdlib.h>	// rand
 #include <string.h>
 
@@ -15,13 +16,6 @@
 	uint8_t rx_circular_buffer3[RX_BUFFER_SIZE];
 
 	/* ESP8266 variables */
-	#define THINGSPEAK_ADDRESS	"api.thingspeak.com"
-	#define THINGSPEAK_API_KEY	"5ZRXVI7HIJQPGKID"				// Enter your Write API here
-	//#define WIFI_SSID			"Kitchen"
-	//#define WIFI_PASS			"Papanina36"
-	#define WIFI_SSID			"Tapac"
-	#define WIFI_PASS			"27051329"
-
 	char wifi_cmd[512];
 
 	uint32_t rx_count = 0;
@@ -172,10 +166,13 @@ void UART_Read (void)
  }	// void UART_Read(void)
 //======================================================================
 
-void RingBuffer_DMA_Main(void)
+void RingBuffer_DMA_Main(int value2, int value3, int value4, int value5)
 {
+	sprintf(wifi_cmd, "Value: %d %d %d %d\r\n", value2, value3, value4, value5);
+	HAL_UART_Transmit(&huart1, (uint8_t *)wifi_cmd, strlen(wifi_cmd), 1000);
+
 	char http_req[200];
-	sprintf(http_req, "GET /update?api_key=%s&field1=%d\r\n\r\n",THINGSPEAK_API_KEY, rand() % 100);
+	sprintf(http_req, "GET /update?api_key=%s&field2=%d&field3=%d&field4=%d&field5=%d\r\n\r\n",THINGSPEAK_API_KEY, value2, value3, value4, value5);
 
 	/* Connect to server */
 	sprintf(wifi_cmd, "AT+CIPSTART=\"TCP\",\"%s\",80\r\n", THINGSPEAK_ADDRESS);
