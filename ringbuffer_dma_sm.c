@@ -126,7 +126,7 @@ void RingBuffer_DMA_Connect(void)
 	HAL_Delay(5000);
 	UART_Read();
 
-	sprintf(wifi_cmd,"WiFi Started");
+	sprintf(wifi_cmd,"WiFi Started\r\n");
 	HAL_UART_Transmit(&huart1, (uint8_t *)wifi_cmd, strlen(wifi_cmd), 1000);
 
 }
@@ -136,8 +136,8 @@ void UART_Read (void)
  {
 	/* Check number of bytes in RingBuffer */
 	rx_count = RingBuffer_DMA_Count(&rx_buffer3);
-	sprintf(wifi_cmd,"DMA_count= %d\r\n", (int)rx_count);
-	HAL_UART_Transmit(&huart1, (uint8_t *)wifi_cmd, strlen(wifi_cmd), 100);
+//	sprintf(wifi_cmd,"DMA_count= %d\r\n", (int)rx_count);
+//	HAL_UART_Transmit(&huart1, (uint8_t *)wifi_cmd, strlen(wifi_cmd), 100);
 
 	/* Process each byte individually */
 	while (rx_count--)
@@ -194,6 +194,6 @@ void RingBuffer_DMA_Main(char* info, uint8_t size_of_info)
 	HAL_Delay(100);
 	UART_Read();
 
-	HAL_Delay(40000);
+	//HAL_Delay(40000);
 }
 //*************************************************************************
