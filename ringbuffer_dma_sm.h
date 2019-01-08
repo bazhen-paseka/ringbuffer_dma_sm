@@ -19,6 +19,6 @@ uint8_t RingBuffer_DMA_GetByte(RingBuffer_DMA * buffer);
 uint32_t RingBuffer_DMA_Count(RingBuffer_DMA * buffer);
 
 void RingBuffer_DMA_Connect(void);
-void RingBuffer_DMA_Main(char* info, uint8_t size_of_info);
+void RingBuffer_DMA_Main(char* info);
 
 #endif /* RINGBUFFER_H_INCLUDED */
