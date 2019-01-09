@@ -19,8 +19,8 @@
 	char wifi_cmd[512];
 
 	uint32_t rx_count = 0;
-	uint8_t icmd = 0;
-	char cmd[512];
+	uint8_t icmd_sm_u8 = 0;
+	char cmd_sm_char[512];
 
 //*************************************************************************
 
@@ -146,11 +146,11 @@ void UART_Read (void)
 		if (b == '\n')
 		{ /* If \n process command */
 			/* Terminate string with \0 */
-			cmd[icmd] = 0;
-			icmd = 0;
+			cmd_sm_char[icmd_sm_u8] = 0;
+			icmd_sm_u8 = 0;
 			/* Display received messages */
 
-			sprintf(wifi_cmd,"%s\r\n", cmd);
+			sprintf(wifi_cmd,"%s\r\n", cmd_sm_char);
 			HAL_UART_Transmit(&huart1, (uint8_t *)wifi_cmd, strlen(wifi_cmd), 100);
 		  	HAL_Delay(100);
 		}
@@ -160,7 +160,7 @@ void UART_Read (void)
 		}
 		else
 		{
-			cmd[icmd++ % 512] = b;	/* If regular character, put it into cmd[] */
+			cmd_sm_char[icmd_sm_u8++ % 512] = b;	/* If regular character, put it into cmd_sm_char[] */
 		}
 	}
  }	// void UART_Read(void)
