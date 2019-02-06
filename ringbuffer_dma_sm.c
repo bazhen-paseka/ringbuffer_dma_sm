@@ -1,6 +1,6 @@
 
 #include "ringbuffer_dma_sm.h"
-#include "ringbuffer_dma_parol.h"
+#include "../ringbuffer_dma_parol.h"
 #include <stdlib.h>	// rand
 #include <string.h>
 
