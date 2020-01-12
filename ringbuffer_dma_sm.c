@@ -30,8 +30,7 @@ void UART_Read (void);
 
 
 
-uint32_t RingBuffer_DMA_Count(RingBuffer_DMA * buffer)
-{
+uint32_t RingBuffer_DMA_Count(RingBuffer_DMA * buffer) {
 	// get counter returns the number of remaining data units in the current DMA Stream transfer (total size - received count)
 	// current head = start + (size - received count)
 	uint8_t const * head = buffer->data + buffer->size - __HAL_DMA_GET_COUNTER(buffer->hdma);
@@ -43,8 +42,7 @@ uint32_t RingBuffer_DMA_Count(RingBuffer_DMA * buffer)
 }
 //*************************************************************************
 
-uint8_t RingBuffer_DMA_GetByte(RingBuffer_DMA * buffer)
-{
+uint8_t RingBuffer_DMA_GetByte(RingBuffer_DMA * buffer) {
 	// get counter returns the number of remaining data units in the current DMA Stream transfer (total size - received count)
 	// current head = start + (size - received count)
 	uint8_t const * head = buffer->data + buffer->size - __HAL_DMA_GET_COUNTER(buffer->hdma);
@@ -62,16 +60,14 @@ uint8_t RingBuffer_DMA_GetByte(RingBuffer_DMA * buffer)
 }
 //*************************************************************************
 
-void RingBuffer_DMA_Init(RingBuffer_DMA * buffer, DMA_HandleTypeDef * hdma, uint8_t * data, uint32_t size)
-{
+void RingBuffer_DMA_Init(RingBuffer_DMA * buffer, DMA_HandleTypeDef * hdma, uint8_t * data, uint32_t size) {
 	buffer->data = data; // set array
 	buffer->size = size; // and its size
 	buffer->hdma = hdma; // initialized DMA
 	buffer->tail_ptr = data; // tail == head == start of array
 }
 
-void RingBuffer_DMA_Connect(void)
-{
+void RingBuffer_DMA_Connect(void) {
 	/* Init RingBuffer_DMA object */
 	  RingBuffer_DMA_Init(&rx_buffer3, &hdma_usart3_rx, rx_circular_buffer3, RX_BUFFER_SIZE);
 	  HAL_UART_Receive_DMA(&huart3, rx_circular_buffer3, RX_BUFFER_SIZE);
@@ -132,19 +128,16 @@ void RingBuffer_DMA_Connect(void)
 }
 //*************************************************************************
 
-void UART_Read (void)
- {
+void UART_Read (void)  {
 	/* Check number of bytes in RingBuffer */
 	rx_count = RingBuffer_DMA_Count(&rx_buffer3);
 //	sprintf(wifi_cmd,"DMA_count= %d\r\n", (int)rx_count);
 //	HAL_UART_Transmit(&huart1, (uint8_t *)wifi_cmd, strlen(wifi_cmd), 100);
 
 	/* Process each byte individually */
-	while (rx_count--)
-	{
+	while (rx_count--) {
 		uint8_t b = RingBuffer_DMA_GetByte(&rx_buffer3);	/* Read out one byte from RingBuffer */
-		if (b == '\n')
-		{ /* If \n process command */
+		if (b == '\n') { /* If \n process command */
 			/* Terminate string with \0 */
 			cmd_sm_char[icmd_sm_u8] = 0;
 			icmd_sm_u8 = 0;
@@ -154,20 +147,17 @@ void UART_Read (void)
 			HAL_UART_Transmit(&huart1, (uint8_t *)wifi_cmd, strlen(wifi_cmd), 100);
 		  	HAL_Delay(100);
 		}
-		else if (b == '\r')
-		{
+		else if (b == '\r') {
 			continue;	/* If \r skip */
 		}
-		else
-		{
+		else {
 			cmd_sm_char[icmd_sm_u8++ % 512] = b;	/* If regular character, put it into cmd_sm_char[] */
 		}
 	}
  }	// void UART_Read(void)
 //======================================================================
 
-void RingBuffer_DMA_Main(char* info)
-{
+void RingBuffer_DMA_Main(char* info) {
 	char http_req_2[200];
 	sprintf(http_req_2, "GET /update?api_key=%s", THINGSPEAK_API_KEY);
 	strcat(http_req_2, info);

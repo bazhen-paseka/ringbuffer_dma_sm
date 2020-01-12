@@ -6,8 +6,7 @@
 #include <stdint.h>
 #include "dma.h"
 
-typedef struct
-{
+typedef struct {
     uint8_t * data;
     uint32_t size;
     DMA_HandleTypeDef * hdma;
