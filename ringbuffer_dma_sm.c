@@ -79,21 +79,21 @@ void RingBuffer_DMA_Connect(void) {
 
 	/* CONNECT TO WIFI ROUTER */
 	/* Simple ping */
-	sprintf(wifi_cmd, "AT+RST\r\n");	//		sprintf(wifi_cmd, "AT+RST\r\n");
+	sprintf(wifi_cmd, "AT+RST\r\n");	//		sprintf(wifi_cmd, "AT+RST\r\n");	//	Перезапустить модуль
 	HAL_UART_Transmit(&huart1, (uint8_t *)wifi_cmd, strlen(wifi_cmd), 1000);
 	HAL_UART_Transmit(&huart3, (uint8_t *)wifi_cmd, strlen(wifi_cmd), 1000);
 	HAL_Delay(500);
 	UART_Read();
 
 	/* Turn on message echo */
-	sprintf(wifi_cmd, "ATE1\r\n");	//		sprintf(wifi_cmd, "ATE1\r\n");
+	sprintf(wifi_cmd, "ATE1\r\n");	//		sprintf(wifi_cmd, "ATE1\r\n");	//	включает эхо.
 	HAL_UART_Transmit(&huart1, (uint8_t *)wifi_cmd, strlen(wifi_cmd), 1000);
 	HAL_UART_Transmit(&huart3, (uint8_t *)wifi_cmd, strlen(wifi_cmd), 1000);
 	HAL_Delay(100);
 	UART_Read();
 
 	/* Display version info */
-	sprintf(wifi_cmd, "AT+GMR\r\n");
+	sprintf(wifi_cmd, "AT+GMR\r\n");	//	Проверить информацию о версии
 	HAL_UART_Transmit(&huart1, (uint8_t *)wifi_cmd, strlen(wifi_cmd), 1000);
 	HAL_UART_Transmit(&huart3, (uint8_t *)wifi_cmd, strlen(wifi_cmd), 1000);
 	HAL_Delay(500);
@@ -101,7 +101,7 @@ void RingBuffer_DMA_Connect(void) {
 
 
 	/* Set to client mode */
-	sprintf(wifi_cmd, "AT+CWMODE=1\r\n");	//		sprintf(wifi_cmd, "AT+CWMODE_CUR=1\r\n");
+	sprintf(wifi_cmd, "AT+CWMODE=1\r\n");	//		sprintf(wifi_cmd, "AT+CWMODE_CUR=1\r\n");	//	режим работы ESP8266: 1 - клиент
 	HAL_UART_Transmit(&huart1, (uint8_t *)wifi_cmd, strlen(wifi_cmd), 1000);
 	HAL_UART_Transmit(&huart3, (uint8_t *)wifi_cmd, strlen(wifi_cmd), 1000);
 	HAL_Delay(100);
@@ -109,14 +109,14 @@ void RingBuffer_DMA_Connect(void) {
 	HAL_Delay(2000);
 
 	/* Connect to network */
-	sprintf(wifi_cmd, "AT+CWJAP_CUR=\"%s\",\"%s\"\r\n", WIFI_SSID, WIFI_PASS);
+	sprintf(wifi_cmd, "AT+CWJAP_CUR=\"%s\",\"%s\"\r\n", WIFI_SSID, WIFI_PASS);	//	подключение к точке доступа
 	HAL_UART_Transmit(&huart1, (uint8_t *)wifi_cmd, strlen(wifi_cmd), 1000);
 	HAL_UART_Transmit(&huart3, (uint8_t *)wifi_cmd, strlen(wifi_cmd), 1000);
 	HAL_Delay(10000);
 	UART_Read();
 	/* CONNECTED (hope so) */
 	/* Check for IP */
-	sprintf(wifi_cmd, "AT+CIFSR\r\n");	//		sprintf(wifi_cmd, "AT+CIFSR\r\n");
+	sprintf(wifi_cmd, "AT+CIFSR\r\n");	//		sprintf(wifi_cmd, "AT+CIFSR\r\n");	//	получение локального IP-адреса.
 	HAL_UART_Transmit(&huart1, (uint8_t *)wifi_cmd, strlen(wifi_cmd), 1000);
 	HAL_UART_Transmit(&huart3, (uint8_t *)wifi_cmd, strlen(wifi_cmd), 1000);
 	HAL_Delay(5000);
