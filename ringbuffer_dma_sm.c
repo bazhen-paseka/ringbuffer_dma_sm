@@ -157,10 +157,34 @@ void UART_Read (void)  {
  }	// void UART_Read(void)
 //======================================================================
 
-void RingBuffer_DMA_Main(char* info) {
+void RingBuffer_DMA_Main(char* _info_1, char* _info_2) {
 	char http_req_2[200];
-	sprintf(http_req_2, "GET /update?api_key=%s", THINGSPEAK_API_KEY);
-	strcat(http_req_2, info);
+	sprintf(http_req_2, "GET /update?api_key=%s", THINGSPEAK_API_KEY_1);
+	strcat(http_req_2, _info_1);
+
+	/* Connect to server */
+	sprintf(wifi_cmd, "AT+CIPSTART=\"TCP\",\"%s\",80\r\n", THINGSPEAK_ADDRESS);
+	HAL_UART_Transmit(&huart1, (uint8_t *)wifi_cmd, strlen(wifi_cmd), 1000);
+	HAL_UART_Transmit(&huart3, (uint8_t *)wifi_cmd, strlen(wifi_cmd), 1000);
+	HAL_Delay(2000);
+	UART_Read();
+
+	/* Send data length (length of request) */
+	sprintf(wifi_cmd, "AT+CIPSEND=%d\r\n", strlen(http_req_2));
+	HAL_UART_Transmit(&huart1, (uint8_t *)wifi_cmd, strlen(wifi_cmd), 1000);
+	HAL_UART_Transmit(&huart3, (uint8_t *)wifi_cmd, strlen(wifi_cmd), 1000);
+	HAL_Delay(2000); // wait for ">"
+	UART_Read();
+
+	/* Send data */
+	HAL_UART_Transmit(&huart1, (uint8_t *)http_req_2, strlen(http_req_2), 1000);
+	HAL_UART_Transmit(&huart3, (uint8_t *)http_req_2, strlen(http_req_2), 1000);
+	HAL_Delay(100);
+	UART_Read();
+
+	HAL_Delay(1000);
+	sprintf(http_req_2, "GET /update?api_key=%s", THINGSPEAK_API_KEY_2);
+	strcat(http_req_2, _info_2);
 
 	/* Connect to server */
 	sprintf(wifi_cmd, "AT+CIPSTART=\"TCP\",\"%s\",80\r\n", THINGSPEAK_ADDRESS);
