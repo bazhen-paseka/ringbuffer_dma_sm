@@ -122,7 +122,7 @@ void RingBuffer_DMA_Connect(void) {
 	HAL_Delay(5000);
 	UART_Read();
 
-	sprintf(wifi_cmd,"WiFi Started\r\n");
+	sprintf(wifi_cmd,"WiFi Started.\r\n");
 	HAL_UART_Transmit(&huart1, (uint8_t *)wifi_cmd, strlen(wifi_cmd), 1000);
 
 }
